@@ -126,16 +126,25 @@ function initializeMockProjects() {
             title: "Project 3",
             toDos: [
                 { label: "Task 3.1", priority: "low", dueDate: "2023-10-04" },
-                { label: "Task 3.2", priority: "medium", dueDate: "2023-10-05" },
+                { label: "This is an extremely long task and let's see what it looks like", priority: "medium", dueDate: "2023-10-05" },
                 { label: "Task 3.3", priority: "high", dueDate: "2023-10-06" }
+            ]
+        },
+        {
+            title: "Project 4",
+            toDos: [
+                { label: "Task 4.1", priority: "medium", dueDate: "2023-10-07" },
+                { label: "Task 4.2", priority: "high", dueDate: "2023-10-08" }
             ]
         }
     ];
 
     mockProjects.forEach(project => createProject(project.title, project.toDos));
 }
-
 initializeMockProjects();
+
+
+
 
 function populateProjects() {
     const main = document.querySelector('main');
