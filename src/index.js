@@ -208,6 +208,9 @@ function populateProjects() {
             deleteBtn.addEventListener('click', () => {
                 deleteProjectById(project.id); //Delete the project from LocalStorage
                 populateProjects(); // Refresh the project list
+                if(document.querySelector('main').textContent == '') {
+                    document.querySelector('main').innerHTML='<div style="grid-column: 2;"><h3>No projects to display. Click on the button below ↘️ to create a new project!</h3></div>';
+                }
             });
 
             projectActions.appendChild(editBtn);
@@ -277,7 +280,13 @@ function populateProjects() {
     });
 }
 
-    if (localStorage.getItem('initialiseCheck') != 'true') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.querySelector('main').textContent == '') {
+            document.querySelector('main').innerHTML='<div style="grid-column: 2;"><h3>No projects to display. Click on the button below ↘️ to create a new project!</h3></div>';
+        }
+    });
+
+    if (localStorage.getItem('initialiseCheck') != 'true' && document.querySelector('main').textContent != '') {
         console.log("Initialising mock projects...");
         initializeMockProjects();
         populateProjects();
@@ -286,6 +295,8 @@ function populateProjects() {
         keys.forEach(key => {
             console.table(fetchProjectById(key));
         });
+    } else if (document.querySelector('main').textContent == '') {
+        document.querySelector('main').innerHTML='<div style="grid-column: 2;"><h3>No projects to display. Click on the button below ↘️ to create a new project!</h3></div>';
     }
 
     populateProjects()
