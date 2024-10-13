@@ -216,6 +216,20 @@ function populateProjects() {
                 const todoPriority = document.createElement('span');
                 todoPriority.classList.add('todo-priority', 'todo-right');
                 todoPriority.textContent = toDo.priority;
+                switch (toDo.priority) {
+                    case 'low':
+                        todoPriority.classList.add('low');
+                        break;
+                    case 'medium':
+                        todoPriority.classList.add('medium');
+                        break;
+                    case 'high':
+                        todoPriority.classList.add('high');
+                        break;
+                    default:    // Default case for invalid priority
+                        todoPriority.classList.add('medium');
+                        break;  
+                }
 
                 const todoId = document.createElement('span');
                 todoId.classList.add('todo-id');
