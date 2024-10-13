@@ -1,0 +1,47 @@
+:root {
+    --color1: #fff6ee; /* white/bgcolor */
+    --color2: #7EACB5;
+    --color3: #FADFA1;
+    --color4: #C96868; 
+}
+
+html {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--color1);
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background: linear-gradient(to bottom, var(--color4) 65%, transparent 100%);
+    position: sticky;
+    top: 0px;
+
+    h1 {
+        color: var(--color1);
+        padding: 25px 0 60px 0;
+    }
+}
+
+footer {
+    text-align: center;
+    padding: 25px 0 15px 0;
+    background: linear-gradient(to top, var(--color4) 75%, transparent 100%);
+    color: var(--color1);
+
+    position: sticky;
+    bottom: 0px;
+
+    a {
+        text-decoration:dotted;
+        color:#FADFA1;
+        font-weight: 500;
+    }
+}
