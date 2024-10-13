@@ -1,5 +1,11 @@
 import "./styles.css"
 import "./normalize.css"
+import { createProjectDialog, createTaskDialog } from "./forms";
+
+const createProjectButton = document.querySelector('.create-project');
+createProjectButton.addEventListener('click', () => {
+    createProjectDialog();
+});
 
 function generateID() {
     return Math.random().toString(36).substr(2, 9); // Generate a random ID
@@ -23,6 +29,7 @@ const Project = function (id, title, toDos = []) {
         const newToDo = new ToDo(label, priority, dueDate, id);
         this.toDos.push(newToDo);
     };
+    
 };
 
 // Project creation
@@ -67,25 +74,41 @@ function deleteProjectById(id) {
     }
 }
 
+/**
+ * Deletes a ToDo item by its ID.
+ * @param {string} toDoId - The ID of the ToDo item to delete.
+ */
 function deleteToDoById(toDoId) {
-    const keys = Object.keys(localStorage);
+    // Get all keys from localStorage
+    const keys = Object.keys(localStorage).filter(key => key !== 'initialiseCheck');
+    
+    // Iterate over each key
     for (let key of keys) {
+        // Fetch the project by its ID
         const project = fetchProjectById(key);
+        
         if (project) {
+            // Find the index of the ToDo item with the given ID
             const toDoIndex = project.toDos.findIndex(toDo => toDo.id === toDoId);
+            
+            // If the ToDo item is found, remove it from the project's toDos array
             if (toDoIndex !== -1) {
                 project.toDos.splice(toDoIndex, 1);
+                
+                // Update the project in localStorage
                 localStorage.setItem(project.id, JSON.stringify(project));
+                
                 console.log(`Deleted ToDo with ID ${toDoId} from project with ID ${project.id}`);
                 return;
             }
         }
     }
+    
+    // If no ToDo item with the given ID is found, log an error message
     console.error(`NO SUCH TODO EXISTS with ID ${toDoId}`);
 }
 
 
-localStorage.clear();
 // var prova = createProject("PorcoDio");
 // console.log(`Created project with ID ${prova.id} and title ${prova.title}`);
 
@@ -107,50 +130,51 @@ localStorage.clear();
 
 // fetchProjectById(prova.id);
 
+
 function initializeMockProjects() {
     const mockProjects = [
         {
+            id: generateID(),
             title: "Project 1",
             toDos: [
-                { label: "Task 1.1", priority: "low", dueDate: "2023-10-01" },
-                { label: "Task 1.2", priority: "medium", dueDate: "2023-10-02" }
+                { label: "Task 1.1", priority: "low", dueDate: "2023-10-01", id: generateID() },
+                { label: "Task 1.2", priority: "medium", dueDate: "2023-10-02", id: generateID() }
             ]
         },
         {
+            id: generateID(),
             title: "Project 2",
             toDos: [
-                { label: "Task 2.1", priority: "high", dueDate: "2023-10-03" }
+                { label: "Task 2.1", priority: "high", dueDate: "2023-10-03", id: generateID() }
             ]
         },
         {
+            id: generateID(),
             title: "Project 3",
             toDos: [
-                { label: "Task 3.1", priority: "low", dueDate: "2023-10-04" },
-                { label: "This is an extremely long task and let's see what it looks like", priority: "medium", dueDate: "2023-10-05" },
-                { label: "Task 3.3", priority: "high", dueDate: "2023-10-06" }
+                { label: "Task 3.1", priority: "low", dueDate: "2023-10-04", id: generateID() },
+                { label: "This is an extremely long task and let's see what it looks like", priority: "medium", dueDate: "2023-10-05", id: generateID() },
+                { label: "Task 3.3", priority: "high", dueDate: "2023-10-06", id: generateID() }
             ]
         },
         {
+            id: generateID(),
             title: "Project 4",
             toDos: [
-                { label: "Task 4.1", priority: "medium", dueDate: "2023-10-07" },
-                { label: "Task 4.2", priority: "high", dueDate: "2023-10-08" }
+                { label: "Task 4.1", priority: "medium", dueDate: "2023-10-07", id: generateID() },
+                { label: "Task 4.2", priority: "high", dueDate: "2023-10-08", id: generateID() }
             ]
         }
     ];
 
     mockProjects.forEach(project => createProject(project.title, project.toDos));
 }
-initializeMockProjects();
-
-
-
 
 function populateProjects() {
     const main = document.querySelector('main');
     main.innerHTML = ''; // Clear existing content
 
-    const keys = Object.keys(localStorage);
+    const keys = Object.keys(localStorage).filter(key => key !== 'initialiseCheck');
     keys.forEach(key => {
         const project = fetchProjectById(key);
         if (project) {
@@ -174,6 +198,9 @@ function populateProjects() {
             const editBtn = document.createElement('button');
             editBtn.classList.add('edit-btn');
             editBtn.textContent = 'Edit';
+            editBtn.addEventListener('click', (e) => {
+                createTaskDialog(e); //Open the dialog to add a task
+            });
 
             const deleteBtn = document.createElement('button');
             deleteBtn.classList.add('delete-btn');
@@ -250,4 +277,17 @@ function populateProjects() {
     });
 }
 
-populateProjects();
+    if (localStorage.getItem('initialiseCheck') != 'true') {
+        console.log("Initialising mock projects...");
+        initializeMockProjects();
+        populateProjects();
+        localStorage.setItem('initialiseCheck', 'true');
+        const keys = Object.keys(localStorage).filter(key => key !== 'initialiseCheck');
+        keys.forEach(key => {
+            console.table(fetchProjectById(key));
+        });
+    }
+
+    populateProjects()
+
+export {generateID, createProject, fetchProjectById, addToDo, deleteProjectById, deleteToDoById, populateProjects}
