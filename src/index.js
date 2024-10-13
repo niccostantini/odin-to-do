@@ -86,23 +86,145 @@ function deleteToDoById(toDoId) {
 
 
 localStorage.clear();
-var prova = createProject("PorcoDio");
-console.log(`Created project with ID ${prova.id} and title ${prova.title}`);
+// var prova = createProject("PorcoDio");
+// console.log(`Created project with ID ${prova.id} and title ${prova.title}`);
 
-console.table(fetchProjectById(prova.id));
-console.log(`Fetched project with ID ${prova.id}`);
+// console.table(fetchProjectById(prova.id));
+// console.log(`Fetched project with ID ${prova.id}`);
 
-addToDo("Nutri il gatto", "high", "ieri", prova.id);
-console.log(`Added task to project with ID ${prova.id}`);
+// addToDo("Nutri il gatto", "high", "ieri", prova.id);
+// console.log(`Added task to project with ID ${prova.id}`);
 
-console.table(fetchProjectById(prova.id));
+// console.table(fetchProjectById(prova.id));
 
-addToDo("Nuota tre volte", "high", "ieri", prova.id);
+// addToDo("Nuota tre volte", "high", "ieri", prova.id);
 
-console.table(fetchProjectById(prova.id));
+// console.table(fetchProjectById(prova.id));
 
-deleteToDoById(fetchProjectById(prova.id).toDos[1].id)
+// deleteToDoById(fetchProjectById(prova.id).toDos[1].id)
 
 // deleteProjectById(prova.id);
 
 // fetchProjectById(prova.id);
+
+function initializeMockProjects() {
+    const mockProjects = [
+        {
+            title: "Project 1",
+            toDos: [
+                { label: "Task 1.1", priority: "low", dueDate: "2023-10-01" },
+                { label: "Task 1.2", priority: "medium", dueDate: "2023-10-02" }
+            ]
+        },
+        {
+            title: "Project 2",
+            toDos: [
+                { label: "Task 2.1", priority: "high", dueDate: "2023-10-03" }
+            ]
+        },
+        {
+            title: "Project 3",
+            toDos: [
+                { label: "Task 3.1", priority: "low", dueDate: "2023-10-04" },
+                { label: "Task 3.2", priority: "medium", dueDate: "2023-10-05" },
+                { label: "Task 3.3", priority: "high", dueDate: "2023-10-06" }
+            ]
+        }
+    ];
+
+    mockProjects.forEach(project => createProject(project.title, project.toDos));
+}
+
+initializeMockProjects();
+
+function populateProjects() {
+    const main = document.querySelector('main');
+    main.innerHTML = ''; // Clear existing content
+
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+        const project = fetchProjectById(key);
+        if (project) {
+            const projectSection = document.createElement('section');
+            projectSection.classList.add('project');
+
+            const projectHeader = document.createElement('div');
+            projectHeader.classList.add('project-header');
+
+            const projectTitle = document.createElement('h2');
+            projectTitle.classList.add('project-title');
+            projectTitle.textContent = project.title;
+
+            const projectId = document.createElement('span');
+            projectId.classList.add('project-id');
+            projectId.textContent = project.id;
+
+            const projectActions = document.createElement('div');
+            projectActions.classList.add('project-actions');
+
+            const editBtn = document.createElement('button');
+            editBtn.classList.add('edit-btn');
+            editBtn.textContent = 'Edit';
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.classList.add('delete-btn');
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.addEventListener('click', () => {
+                deleteProjectById(project.id); //Delete the project from LocalStorage
+                populateProjects(); // Refresh the project list
+            });
+
+            projectActions.appendChild(editBtn);
+            projectActions.appendChild(deleteBtn);
+
+            projectHeader.appendChild(projectTitle);
+            projectHeader.appendChild(projectId);
+            projectHeader.appendChild(projectActions);
+
+            const todoList = document.createElement('ul');
+            todoList.classList.add('todo-list');
+
+            project.toDos.forEach(toDo => {
+                const todoItem = document.createElement('li');
+                todoItem.classList.add('todo-item');
+
+                const todoLeft = document.createElement('div');
+                todoLeft.classList.add('todo-left');
+
+                const todoLabel = document.createElement('span');
+                todoLabel.classList.add('todo-label');
+                todoLabel.textContent = toDo.label;
+
+                const todoDueDate = document.createElement('span');
+                todoDueDate.classList.add('todo-due-date');
+                todoDueDate.textContent = toDo.dueDate;
+
+                todoLeft.appendChild(todoLabel);
+                const separator = document.createTextNode(' 🗓️ ');
+                todoLeft.appendChild(separator);
+                todoLeft.appendChild(todoDueDate);
+
+                const todoPriority = document.createElement('span');
+                todoPriority.classList.add('todo-priority', 'todo-right');
+                todoPriority.textContent = toDo.priority;
+
+                const todoId = document.createElement('span');
+                todoId.classList.add('todo-id');
+                todoId.textContent = toDo.id;
+
+                todoItem.appendChild(todoLeft);
+                todoItem.appendChild(todoPriority);
+                todoItem.appendChild(todoId);
+
+                todoList.appendChild(todoItem);
+            });
+
+            projectSection.appendChild(projectHeader);
+            projectSection.appendChild(todoList);
+
+            main.appendChild(projectSection);
+        }
+    });
+}
+
+populateProjects();

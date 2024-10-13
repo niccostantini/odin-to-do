@@ -30,6 +30,61 @@ header {
     }
 }
 
+main {
+
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+grid-template-rows: repeat(3, 1fr);
+gap: 10px;
+
+margin: calc(2rem + 10px);
+
+.project {
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .project-id, .todo-id {display: none}
+
+    .project-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+
+        .todo-label {font-weight: 600;}
+        .todo-due-date {font-style: italic;}
+
+        li {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            .todo-left {
+                gap: 8px;
+            }
+
+            .todo-priority {
+            font-weight: 500;
+            border: 1px dotted;
+            border-radius: 3px;
+            padding: 4px 8px;
+            }
+        }
+
+
+    }
+}
+
+}
+
 footer {
     text-align: center;
     padding: 25px 0 15px 0;
