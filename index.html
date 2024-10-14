@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toodoo</title>
+<script defer src="main.js"></script></head>
+<body>
+
+    <header>
+
+        <h1>TooDoo</h1>
+
+    </header>
+
+    <main>
+        <section class="project">
+            <div class="project-header">
+                <h2 class="project-title">Project Title</h2> <!-- project.title  -->
+                <span class="project-id">9823098743509</span> <!-- project.id  -->
+                <div class="project-actions">
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            </div>
+            <ul class="todo-list">
+                <li class="todo-item">
+                    <div class="todo-left">
+                        <span class="todo-label">Todo Label</span> <!-- project.toDos[n].label  -->
+                        <span class="todo-due-date">09/07/2025</span> <!-- project.toDos[n].dueDate  -->
+                    </div>
+                    <span class="todo-priority todo-right">High</span> <!-- project.toDos[n].priority  -->
+                    <span class="todo-id">9823098743509</span> <!-- project.toDos[n].id  -->
+                </li>
+                <!-- Repeat the above <li> for each DoDo item -->
+            </ul>
+        </section>
+    </main>
+
+    <div class="create-project">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-plus">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+    </div>
+
+    <footer>
+        <div class="credits">
+            &copy; 2024 <a href="https://github.com/niccostantini">niccostantini</a>
+        </div>
+    </footer>
+    
+</body>
+</html>
