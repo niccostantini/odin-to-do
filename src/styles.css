@@ -6,11 +6,46 @@
     --color5: #ae4343;
     --color6: #38737f;
     --color7: #c1af85;
+
+    --task-done: rgba(126, 175, 181, 0.641);
 }
 
 html {
     font-family: 'Helvetica Neue', Arial, sans-serif;
 }
+
+.create-project {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    z-index: 1000;
+    background-color: var(--color6);
+    color: var(--color1);
+    padding: 17px 20px;
+    border-radius: 10px;
+    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    border: 3px solid var(--color1);
+    transition: all 0.2s ease;
+
+    svg {
+        width: 35px;
+        height: 35px;
+        transition: all 0.2s ease;
+    }
+}
+
+.create-project:hover {
+    background-color: var(--color1);
+    border: 3px solid var(--color6);
+
+    svg path, line, polyline{
+        fill: var(--color1);
+        stroke: var(--color6);
+        
+    }
+}
+
 
 body {
     display: flex;
@@ -45,6 +80,14 @@ dialog {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 500px;
     width: 100%;
+
+    hr {
+        margin: 10px 0;
+        border: none;
+        border-top: 1px solid var(--color2);
+        width: 80%;
+        align-self: center;
+    }
 
     form {
         display: flex;
@@ -81,6 +124,17 @@ dialog {
             width: 50%;
         }
 
+        input[type="submit"]:hover, button:hover {
+            background-color: var(--color4);
+        }
+
+        input[type="reset"] {
+            background-color: var(--color5);
+        }
+        input[type="reset"]:hover {
+            background-color: var(--color4);
+        }
+
         button:hover {
             background-color: var(--color2);
         }
@@ -91,7 +145,7 @@ main {
 
 display: grid;
 grid-template-columns: repeat(3, minmax(300px, 320px));
-grid-auto-rows: minmax(200px, 300px);
+grid-auto-rows: minmax(300px, 400px);
 overflow: scroll;
 scrollbar-width: thin;
 scrollbar-color: var(--color2) var(--color1);
@@ -155,10 +209,36 @@ transition: all 0.5s ease-in-out; /* Smooth transitions for size/position */
         }
     }
 
-    ul {
+    ul.todo-list {
         list-style-type: none;
         padding: 0;
         margin: 0;
+
+        overflow-y: scroll;
+
+        .days-remaining.normal {
+            font-size: small;
+            color: var(--color2);
+            font-weight: 400;
+        }
+
+        .days-remaining.urgent {
+            font-size: small;
+            color: var(--color4);
+            font-weight: 600;
+        }
+
+        .days-remaining.soon {
+            font-size: small;
+            color: var(--color3);
+            font-weight: 500;
+        }
+
+        .days-remaining.overdue {
+            font-size: small;
+            color: var(--color5);
+            font-weight: 700;
+        }
 
         .todo-label {font-weight: 600;}
         .todo-due-date {font-style: italic;}
@@ -177,6 +257,12 @@ transition: all 0.5s ease-in-out; /* Smooth transitions for size/position */
                     text-overflow: ellipsis ;
                     white-space: nowrap; /* ensure the text is displayed in one line */
                     padding-right: 10px;
+                    cursor: pointer;
+                    text-decoration: underline dotted;
+                }
+
+                .todo-label:hover {
+                    color: #727272;
                 }
             
 
@@ -202,45 +288,16 @@ transition: all 0.5s ease-in-out; /* Smooth transitions for size/position */
             .todo-priority.low {
                 color: var(--color2);
                 border-color: var(--color2);
-            }   
-        }
+            }
 
+    }
 
+    .todo-item:has(.done)  {
+        color: var(--task-done);
     }
 }
 
 }
-
-.create-project {
-    position: fixed;
-    bottom: 50px;
-    right: 50px;
-    z-index: 1000;
-    background-color: var(--color6);
-    color: var(--color1);
-    padding: 17px 20px;
-    border-radius: 10px;
-    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    border: 3px solid var(--color1);
-    transition: all 0.2s ease;
-
-    svg {
-        width: 35px;
-        height: 35px;
-        transition: all 0.2s ease;
-    }
-}
-
-.create-project:hover {
-    background-color: var(--color1);
-    border: 3px solid var(--color6);
-
-    svg path, line, polyline{
-        fill: var(--color1);
-        stroke: var(--color6);
-        
-    }
 }
 
 footer {

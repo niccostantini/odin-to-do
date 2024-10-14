@@ -1,6 +1,7 @@
 import "./styles.css"
 import "./normalize.css"
-import { createProjectDialog, createTaskDialog } from "./forms";
+import { createProjectDialog, createTaskDialog, editTaskDialog} from "./forms";
+import { da } from "date-fns/locale";
 
 const createProjectButton = document.querySelector('.create-project');
 createProjectButton.addEventListener('click', () => {
@@ -109,60 +110,39 @@ function deleteToDoById(toDoId) {
 }
 
 
-// var prova = createProject("PorcoDio");
-// console.log(`Created project with ID ${prova.id} and title ${prova.title}`);
-
-// console.table(fetchProjectById(prova.id));
-// console.log(`Fetched project with ID ${prova.id}`);
-
-// addToDo("Nutri il gatto", "high", "ieri", prova.id);
-// console.log(`Added task to project with ID ${prova.id}`);
-
-// console.table(fetchProjectById(prova.id));
-
-// addToDo("Nuota tre volte", "high", "ieri", prova.id);
-
-// console.table(fetchProjectById(prova.id));
-
-// deleteToDoById(fetchProjectById(prova.id).toDos[1].id)
-
-// deleteProjectById(prova.id);
-
-// fetchProjectById(prova.id);
-
-
 function initializeMockProjects() {
     const mockProjects = [
         {
             id: generateID(),
             title: "Project 1",
             toDos: [
-                { label: "Task 1.1", priority: "low", dueDate: "2023-10-01", id: generateID() },
-                { label: "Task 1.2", priority: "medium", dueDate: "2023-10-02", id: generateID() }
+                { label: "Task 1.1", priority: "low", dueDate: "2024-10-01", id: generateID() },
+                { label: "Task 1.2", priority: "medium", dueDate: "2024-10-23", id: generateID() }
             ]
         },
         {
             id: generateID(),
             title: "Project 2",
             toDos: [
-                { label: "Task 2.1", priority: "high", dueDate: "2023-10-03", id: generateID() }
+                { label: "Task 2.1", priority: "high", dueDate: "2024-10-18", id: generateID() },
+                { label: "Task 2.2", priority: "medium", dueDate: "2024-10-18", id: generateID() }
             ]
         },
         {
             id: generateID(),
             title: "Project 3",
             toDos: [
-                { label: "Task 3.1", priority: "low", dueDate: "2023-10-04", id: generateID() },
+                { label: "Task 3.1", priority: "low", dueDate: "2024-10-04", id: generateID() },
                 { label: "This is an extremely long task and let's see what it looks like", priority: "medium", dueDate: "2023-10-05", id: generateID() },
-                { label: "Task 3.3", priority: "high", dueDate: "2023-10-06", id: generateID() }
+                { label: "Task 3.3", priority: "high", dueDate: "2024-29-12", id: generateID() }
             ]
         },
         {
             id: generateID(),
             title: "Project 4",
             toDos: [
-                { label: "Task 4.1", priority: "medium", dueDate: "2023-10-07", id: generateID() },
-                { label: "Task 4.2", priority: "high", dueDate: "2023-10-08", id: generateID() }
+                { label: "Task 4.1", priority: "medium", dueDate: "2024-11-07", id: generateID() },
+                { label: "Task 4.2", priority: "high", dueDate: "2024-12-08", id: generateID() }
             ]
         }
     ];
@@ -233,6 +213,9 @@ function populateProjects() {
                 const todoLabel = document.createElement('span');
                 todoLabel.classList.add('todo-label');
                 todoLabel.textContent = toDo.label;
+                todoLabel.addEventListener('click', (e) => {
+                    editTaskDialog(e); //Open the dialog to edit a task
+                });
 
                 const todoDueDate = document.createElement('span');
                 todoDueDate.classList.add('todo-due-date');
@@ -242,6 +225,30 @@ function populateProjects() {
                 const separator = document.createTextNode(' 🗓️ ');
                 todoLeft.appendChild(separator);
                 todoLeft.appendChild(todoDueDate);
+
+                const daysRemaining = document.createElement('div');
+
+                daysRemaining.classList.add('days-remaining');
+
+                const dueDate = new Date(toDo.dueDate);
+                const today = new Date();
+                const timeDiff = dueDate - today;
+                const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                if (daysDiff <= 0) {
+                    daysRemaining.textContent = `(${daysDiff} days overdue)`; // If due date has passed
+                    daysRemaining.classList.add('overdue');
+                } else if (daysDiff > 0 && daysDiff <= 3) { // If due date is within 3 days
+                    daysRemaining.textContent = `(${daysDiff} days remaining)`;
+                    daysRemaining.classList.add('urgent');
+                } else if (daysDiff > 3 && daysDiff <= 7) { // If due date is within 7 days
+                    daysRemaining.textContent = `(${daysDiff} days remaining)`;
+                    daysRemaining.classList.add('soon');
+                } else {
+                    daysRemaining.textContent = `(${daysDiff} days remaining)`;
+                    daysRemaining.classList.add('normal');
+                }
+
+                todoLeft.appendChild(daysRemaining);
 
                 const todoPriority = document.createElement('span');
                 todoPriority.classList.add('todo-priority', 'todo-right');
@@ -256,6 +263,9 @@ function populateProjects() {
                     case 'high':
                         todoPriority.classList.add('high');
                         break;
+                        case 'done':
+                            todoPriority.classList.add('done');
+                            break;
                     default:    // Default case for invalid priority
                         todoPriority.classList.add('medium');
                         break;  
